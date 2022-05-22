@@ -1,16 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Draggable } from "react-beautiful-dnd";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { MdDone } from "react-icons/md";
 import { Todo } from "./model";
 import "./styles.css";
 
 type Props = {
+  index: number;
   todo: Todo;
   todos: Todo[];
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
 };
 
-const TodoCard = ({ todo, todos, setTodos }: Props) => {
+const TodoCard = ({ index, todo, todos, setTodos }: Props) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [todoText, setTodoText] = useState<string>(todo.todo);
   console.log(`isEditing: ${isEditing}`);
@@ -36,35 +38,40 @@ const TodoCard = ({ todo, todos, setTodos }: Props) => {
   };
 
   return (
-    <form
-      className="todo-card-container"
-      onSubmit={(e) => handleEditing(e, todo.id)}
-    >
-      {isEditing && !todo.isDone ? (
-        <div className="editing-todo-container">
-          <input
-            ref={editInputRef}
-            type="input"
-            className="todo-card--text"
-            value={todoText}
-            onChange={(e) => setTodoText(e.target.value)}
-          />
-        </div>
-      ) : (
-        <span className="todo-card--text">{todo.todo}</span>
+    <Draggable draggableId={todo.id.toString()} index={index}>
+      {(provided) => (
+        <form
+          className="todo-card-container"
+          onSubmit={(e) => handleEditing(e, todo.id)}
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        >
+          {isEditing && !todo.isDone ? (
+            <input
+              ref={editInputRef}
+              type="input"
+              className="todo-card--text"
+              value={todoText}
+              onChange={(e) => setTodoText(e.target.value)}
+            />
+          ) : (
+            <span className="todo-card--text">{todo.todo}</span>
+          )}
+          <div className="todo-card--icons-container">
+            <span className="icon" onClick={() => setIsEditing(true)}>
+              <AiFillEdit />
+            </span>
+            <span className="icon" onClick={() => handleDelete(todo.id)}>
+              <AiFillDelete />
+            </span>
+            <span className="icon" onClick={() => handleDone(todo.id)}>
+              <MdDone />
+            </span>
+          </div>
+        </form>
       )}
-      <div className="todo-card--icons-container">
-        <span className="icon" onClick={() => setIsEditing(true)}>
-          <AiFillEdit />
-        </span>
-        <span className="icon" onClick={() => handleDelete(todo.id)}>
-          <AiFillDelete />
-        </span>
-        <span className="icon" onClick={() => handleDone(todo.id)}>
-          <MdDone />
-        </span>
-      </div>
-    </form>
+    </Draggable>
   );
 };
 

@@ -46,19 +46,46 @@
 
 .todos-container {
   display: flex;
-  justify-content: space-evenly;
-  width: 90%;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 10px;
+  width: 95%;
+}
+
+.tasks-section {
+  display: flex;
+  width: 47.5%;
+  padding: 15px;
+  margin: 5px;
+  border-radius: 5px;
+  background-color: rgb(148, 181, 243);
+  box-shadow: 2px 2px 8px black;
   flex-wrap: wrap;
+}
+
+.completed {
+  background-color: rgb(250, 133, 112);
+}
+
+.tasks-section--heading {
+  width: 100%;
+  font-size: 30px;
+  text-align: center;
 }
 
 .todo-card-container {
   display: flex;
-  align-items: center;
-  width: 29.5%;
+  width: 100%;
   border-radius: 5px;
   padding: 16px;
-  margin-top: 15px;
+  margin: 5px;
   background-color: yellow;
+  transition: 0.2s;
+}
+
+.todo-card-container:hover {
+  box-shadow: 1px 1px 5px black;
+  transform: scale(1.03);
 }
 
 .todo-card--text {
@@ -85,8 +112,14 @@
   flex: 1;
 }
 
-@media (max-width: 768px) {
-  .todo-card-container {
-    width: 100%;
+@media screen and (max-width: 768px) {
+  .todos-container {
+    width: 90%;
+    flex-direction: column;
+  }
+
+  .tasks-section {
+    width: 90%;
+    margin-top: 20px;
   }
 }
